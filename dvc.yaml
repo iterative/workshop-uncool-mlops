@@ -1,0 +1,75 @@
+stages:
+
+  get-data:
+  
+    cmd: python src/get_data.py
+      --output_folder ${data.output_folder}
+
+    deps:
+      - src/get_data.py
+
+    params:
+      - data
+
+    outs:
+      - ${data.output_folder}
+
+    metrics:
+      - ${data.metrics_file}:
+          cache: false
+
+  split-data:
+    cmd: 
+      python src/split_data.py 
+      ${data.output_folder} 
+      ${split.output_folder} 
+      ${split.test_size}
+      ${split.metrics_file} 
+    deps:
+    - ${data.output_folder}
+    - src/split_data.py
+    outs:
+    - ${split.output_folder}
+    metrics:
+    - ${split.metrics_file}:
+        cache: false
+
+  train:
+    cmd: 
+      python src/train.py
+      ${split.output_folder}
+      ${train.output_folder}
+    deps:
+    - ${split.output_folder}
+    - src/train.py
+    params:
+      - data.labels
+      - train
+    outs:
+    - ${train.output_folder}
+    metrics:
+      - ${train.metrics_folder}.json:
+          cache: false
+    plots:
+      - ${train.metrics_folder}:
+          cache: false
+
+  eval:
+    cmd: 
+      python src/eval.py
+      ${split.output_folder}/val.json
+      ${train.output_folder}
+      ${eval.output_folder}
+    params:
+      - data.labels
+    deps:
+    - ${split.output_folder}/val.json
+    - ${train.output_folder}
+    - src/eval.py
+    - src/inference.py
+    plots:
+    - ${eval.output_folder}/plots/confusion_matrix.json:
+        cache: false
+        template: confusion
+        x: actual
+        y: predicted

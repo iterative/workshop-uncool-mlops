@@ -1,0 +1,9 @@
+dvc[gdrive]>=2.8.3
+dvclive>=0.4.5
+fire>=0.4.0
+loguru>=0.5.3
+pygithub>=1.55
+scikit-learn>=1.0.1
+torch>=1.0
+datasets>=1.15
+transformers>=4.12.3
