@@ -21,7 +21,7 @@ train:
   output_folder: outs/train
   metrics_folder: outs/train_metrics
   pretrained_model: MoritzLaurer/xtremedistil-l6-h256-mnli-fever-anli-ling-binary
-  epochs: 8
+  epochs: 10
 
 eval:
   output_folder: outs/eval
