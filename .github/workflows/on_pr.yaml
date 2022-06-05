@@ -1,0 +1,78 @@
+name: DVC & CML Workflow
+
+on:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup
+        run: |
+          pip install -r requirements.txt
+
+      - name: Pull Data
+        continue-on-error: true
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: |
+          dvc pull --force
+
+      - name: Run DVC pipeline
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: |
+          dvc repro
+
+      - name: Share changes
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: |
+          dvc push
+
+      - name: Create a P.R. with CML 
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml pr --rebase "dvc.lock" "params.yaml" "outs/*.json" "outs/eval"  "outs/train_metrics"
+
+      - name: CML Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Metrics & Params" >> report.md
+
+          dvc exp diff main --show-md >> report.md
+                  
+          echo "## Plots" >> report.md
+
+          echo "### Eval Loss" >> report.md
+          dvc plots diff \
+            --target outs/train_metrics/scalars/eval_loss.tsv --show-vega main > vega.json
+          vl2png vega.json -s 1.5 > plot.png
+          cml-publish ./plot.png --md  >> report.md
+
+          echo "### Eval Accuracy" >> report.md
+          dvc plots diff \
+            --target outs/train_metrics/scalars/eval_accuracy.tsv --show-vega main > vega.json
+          vl2png vega.json -s 1.5 > plot.png
+          cml-publish ./plot.png --md  >> report.md
+
+          echo "### Confusion Matrix" >> report.md
+          dvc plots diff \
+            --target outs/eval/plots/confusion_matrix.json --show-vega main > vega.json
+          vl2png vega.json -s 1.5 > plot.png
+          cml-publish ./plot.png --md  >> report.md
+
+          cml send-comment --pr report.md
