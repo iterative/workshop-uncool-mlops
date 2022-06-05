@@ -7,7 +7,7 @@
 - :star: -> https://github.com/iterative/dvc
 - :star: -> https://github.com/iterative/dvclive
 - :star: -> https://github.com/iterative/cml
-- :star: -> https://github.com/huggingface/transformerss
+- :star: -> https://github.com/huggingface/transformers
 
 # Before we start
 

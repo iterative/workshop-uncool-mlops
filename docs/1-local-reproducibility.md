@@ -20,26 +20,26 @@ We use [DVC Params](https://dvc.org/doc/command-reference/params), defined in [p
 
 The pipeline enables local `reproducibility` and can be run with `dvc repro` / `dvc exp run`:
 
-```console
-$ export GITHUB_TOKEN={YOUR_GITHUB_TOKEN}
-$ export LOGURU_LEVEL=INFO
-$ dvc exp run -S train.epochs=8
+```bash
+export GITHUB_TOKEN={YOUR_GITHUB_TOKEN}
+export LOGURU_LEVEL=INFO
+dvc exp run -S train.epochs=8 # or you can also use `repro`
 ```
 
 
 The pipeline generates [DVC Metrics](https://dvc.org/doc/command-reference/metrics) and [DVC Plots](https://dvc.org/doc/command-reference/plots) to evaluate model performance, which can be found in [outs](../outs)
 
-```console
-$ dvc exp diff
+```bash
+dvc exp diff
 ```
 
-```console
-$ dvc plots diff --open
+```bash
+dvc plots diff --open
 ```
 
 Because the metrics and plots files are small enough to be tracked by `git`, after we run the pipeline we can share the results with others:
 
-```
+```bash
 git add `dvc.lock` outs
 git push
 ```
