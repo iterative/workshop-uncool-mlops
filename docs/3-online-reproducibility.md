@@ -69,4 +69,4 @@ In the above workflow we are using the default GitHub runners to train our model
 
 While this is enough for our use case (small dataset, small model), your project would often require more compute resources.
 
-[CML Self-Hosted Runners](https://cml.dev/doc/self-hosted-runners) allows you to allocate cloud instances (or on-premise machines) and use them in your GitHub actions workflow.
+[CML Self-Hosted Runners](https://cml.dev/doc/self-hosted-runners) allow you to allocate cloud instances (or on-premise machines) and use them in your GitHub actions workflow.

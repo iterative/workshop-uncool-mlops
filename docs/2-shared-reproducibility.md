@@ -4,7 +4,7 @@ DVC remotes provide a location to store arbitrarily large files and directories.
 
 ![DVC Remote](./imgs/dvc-remote.png)
 
-First, you need to create a new folder on our [Google Drive](https://drive.google.com), navigate to the new folder and copy the last part of the URL.
+First, you need to create a new folder on your [Google Drive](https://drive.google.com), navigate to the new folder and copy the last part of the URL.
 
 ![Google Drive](./imgs/gdrive.png)
 
@@ -22,7 +22,7 @@ dvc remote add --default myremote gdrive://{COPY PASTED GDRIVE URL}
 
 The results of the pipeline can now be shared with others by using [dvc push](https://dvc.org/doc/command-reference/push) and [dvc pull](https://dvc.org/doc/command-reference/pull).
 
-```console
+```bash
 dvc push -j 4
 ```
 

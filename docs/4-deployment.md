@@ -1,6 +1,6 @@
 # Deployment
 
-Now that GitHub has access to our DVC Remote, we can automate the deploymend of our model.
+Now that GitHub has access to our DVC Remote, we can automate the deployment of our model.
 
 ![Deployment](./imgs/deployment.jpg)
 
@@ -27,7 +27,7 @@ https://github.com/iterative/workshop-uncool-mlops-solution/blob/main/.github/wo
 
 Once this has been merged and the first image published, we can use it from anywhere:
 
-```console
+```bash
 docker run "ghcr.io/iterative/workshop-uncool-mlops-solution:main" "dvc pull fails when using my S3 remote"
 {"label": "data-sync", "score": 0.8273094296455383}
 ```
