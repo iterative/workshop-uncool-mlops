@@ -1,2 +1,3 @@
 .venv/
 dvc_plots
+src/__pycache__
